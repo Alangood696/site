@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuaderno de Negocios Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0f1724;
+      --card: #1a2436;
+      --accent: #f97316;
+      --accent-gradient: linear-gradient(135deg, #f97316, #fb923c);
+      --muted: #94a3b8;
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-2: rgba(255, 255, 255, 0.03);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --success: #22c55e;
+      --warning: #eab308;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --text-primary: #e6eef8;
+      --text-secondary: #94a3b8;
+      --bg-primary: #0f1724;
+      --bg-secondary: #131d2e;
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.7);
+      --shadow-hover: 0 15px 40px rgba(2, 6, 23, 0.8);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --accent: #f97316;
+      --accent-gradient: linear-gradient(135deg, #f97316, #fb923c);
+      --muted: #64748b;
+      --glass: rgba(148, 163, 184, 0.1);
+      --glass-2: rgba(148, 163, 184, 0.05);
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(135deg, var(--bg), var(--bg-secondary));
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background 0.3s ease;
+      line-height: 1.6;
+    }
+
+    body {
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .app {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0;
+      animation: slideUp 0.6s ease-out forwards;
+      animation-delay: 0.2s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 10px rgba(249, 115, 22, 0.4); }
+      50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.7); }
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* Welcome panel */
+    .welcome-panel {
+      background: linear-gradient(135deg, var(--card), var(--bg-secondary));
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      animation: glow 3s infinite alternate;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent-gradient);
+      background-size: 200% 100%;
+      animation: gradient 3s ease infinite;
+    }
+
+    .welcome-title {
+      font-size: 32px;
+      margin-bottom: 20px;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    .welcome-subtitle {
+      color: var(--muted);
+      margin-bottom: 30px;
+      font-size: 18px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 24px;
+      border-radius: var(--radius);
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .feature-icon {
+      font-size: 36px;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 20px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .feature-desc {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Main app content */
+    .app-content {
+      display: none;
+      padding: 16px;
+      max-width: 100%;
+    }
+
+    /* Header styles */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      position: relative;
+      flex-wrap: wrap;
+      padding: 16px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      font-weight: 800;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-info {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .controls {
+      margin-left: auto;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    /* Button styles */
+    button {
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      color: inherit;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      box-shadow: var(--shadow-card);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow-hover);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.primary {
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+    }
+
+    button.success {
+      background: var(--success);
+      color: white;
+      border: none;
+    }
+
+    button.danger {
+      background: var(--danger);
+      color: white;
+      border: none;
+    }
+
+    /* Navigation */
+    .app-nav {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding: 8px 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .app-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-item {
+      padding: 12px 20px;
+      background: var(--glass);
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-item.active {
+      background: var(--accent-gradient);
+      color: white;
+    }
+
+    /* Sections */
+    .app-section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .app-section.active {
+      display: block;
+    }
+
+    /* Notes section */
+    .notes-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .notes-sidebar {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .notes-editor {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--accent);
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 12px 16px;
+      padding-left: 44px;
+      border-radius: var(--radius-sm);
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: inherit;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+
+    .search-container input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    .notes-scrollable {
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .note-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .note-item {
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+      transform-origin: center;
+      position: relative;
+    }
+
+    .note-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(4px);
+    }
+
+    .note-item.active {
+      outline: 2px solid var(--accent);
+      background: rgba(249, 115, 22, 0.1);
+      animation: pulse 2s infinite;
+    }
+
+    .note-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .note-item-title {
+      font-weight: 600;
+      margin-right: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      font-size: 15px;
+    }
+
+    .note-item-date {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .note-item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent);
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .editor-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: inherit;
+      font-size: 15px;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    #noteTitle {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    #noteBody {
+      min-height: 200px;
+      resize: vertical;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Calculator section */
+    .calculator-container {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .calculator {
+      background: var(--glass);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin-top: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .calc-display {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      text-align: right;
+      font-family: var(--mono);
+      margin-bottom: 16px;
+      min-height: 44px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .calc-btn {
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .calc-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .calc-btn.operator {
+      background: rgba(249, 115, 22, 0.2);
+      color: var(--accent);
+    }
+
+    .calc-btn.equals {
+      background: var(--accent-gradient);
+      color: white;
+      grid-column: span 2;
+    }
+
+    /* Income section */
+    .income-container, .account-container {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .income-form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .income-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .income-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--glass);
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .income-details {
+      flex: 1;
+    }
+
+    .income-amount {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* Account status section */
+    .account-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background: var(--glass);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .summary-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 8px 0;
+      color: var(--accent);
+    }
+
+    .summary-label {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* Stats */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat-box {
+      background: var(--glass);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-box i {
+      font-size: 16px;
+      color: var(--accent);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out forwards;
+      animation-delay: 0.8s;
+      padding: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      .app-content {
+        padding: 24px;
+      }
+      
+      .notes-container {
+        grid-template-columns: 1fr 2fr;
+        gap: 24px;
+      }
+      
+      .income-form {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .account-summary {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .app-content {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Welcome Screen -->
+<div class="welcome-panel" id="welcomePanel">
+  <h1 class="welcome-title"><i class="fas fa-book-open"></i> Cuaderno de Negocios Pro</h1>
+  <p class="welcome-subtitle">La herramienta todo en uno para gestionar tus notas financieras, inventario y ideas de negocio con elegancia y eficiencia.</p>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-sticky-note"></i></div>
+      <h3 class="feature-title">Notas Organizadas</h3>
+      <p class="feature-desc">Categoriza y etiqueta tus notas para un acceso rápido y organizado.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-calculator"></i></div>
+      <h3 class="feature-title">Cálculos Inteligentes</h3>
+      <p class="feature-desc">Detecta automáticamente valores numéricos y calcula totales.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+      <h3 class="feature-title">Seguimiento de Ingresos</h3>
+      <p class="feature-desc">Registra y analiza tus ingresos para tomar mejores decisiones.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-wallet"></i></div>
+      <h3 class="feature-title">Estado de Cuenta</h3>
+      <p class="feature-desc">Mantén un control completo de tus finanzas personales y de negocio.</p>
+    </div>
+  </div>
+  
+  <button id="startButton" class="primary" style="margin-top: 40px;">
+    <i class="fas fa-play"></i> Comenzar
+  </button>
+</div>
+
+<!-- Main App Content -->
+<div class="app-content" id="appContent">
+  <header>
+    <div>
+      <h1><i class="fas fa-book"></i> Cuaderno de Negocios</h1>
+      <div class="header-info">Gestiona tus notas, gastos e inventario</div>
+    </div>
+    <div class="controls">
+      <div class="theme-toggle">
+        <span class="toggle-label"><i class="fas fa-moon"></i></span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label"><i class="fas fa-sun"></i></span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <div class="nav-item active" data-section="notes">Notas</div>
+    <div class="nav-item" data-section="calculator">Calculadora</div>
+    <div class="nav-item" data-section="income">Ingresos</div>
+    <div class="nav-item" data-section="account">Estado de Cuenta</div>
+  </nav>
+
+  <!-- Notes Section -->
+  <section id="notesSection" class="app-section active">
+    <div class="notes-container">
+      <div class="notes-sidebar">
+        <div class="sidebar-title">
+          <span><i class="fas fa-sticky-note"></i> Mis Notas</span>
+          <span class="notes-count" id="notesCount">0/0</span>
+        </div>
+        
+        <div class="search-container">
+          <div class="search-icon"><i class="fas fa-search"></i></div>
+          <input type="text" id="searchInput" placeholder="Buscar notas...">
+        </div>
+        
+        <div class="notes-scrollable" id="noteList">
+          <!-- Notes will be populated here -->
+        </div>
+        
+        <div class="stats-container">
+          <div class="stat-box">
+            <i class="fas fa-sticky-note"></i>
+            <span id="totalNotes">0 notas</span>
+          </div>
+          <div class="stat-box">
+            <i class="fas fa-star"></i>
+            <span id="totalFavorites">0 fav</span>
+          </div>
+        </div>
+        
+        <button id="newNoteBtn" class="primary" style="margin-top: 16px; width: 100%;">
+          <i class="fas fa-plus"></i> Nueva nota
+        </button>
+      </div>
+      
+      <div class="notes-editor">
+        <div class="editor-header">
+          <input id="noteTitle" placeholder="Título de la nota">
+          <select id="noteCategory">
+            <option value="">Sin categoría</option>
+            <option value="finanzas">Finanzas</option>
+            <option value="inventario">Inventario</option>
+            <option value="ideas">Ideas</option>
+            <option value="clientes">Clientes</option>
+            <option value="proveedores">Proveedores</option>
+          </select>
+        </div>
+        
+        <textarea id="noteBody" placeholder="Escribe tus notas de negocio aquí..."></textarea>
+        
+        <div class="editor-toolbar">
+          <button id="favoriteBtn"><i class="far fa-star"></i></button>
+          <button id="saveBtn" class="success"><i class="fas fa-save"></i> Guardar</button>
+          <button id="resetBtn" class="danger"><i class="fas fa-trash"></i> Borrar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator Section -->
+  <section id="calculatorSection" class="app-section">
+    <div class="calculator-container">
+      <h2><i class="fas fa-calculator"></i> Calculadora</h2>
+      <p>Realiza cálculos rápidos para tus operaciones comerciales.</p>
+      
+      <div class="calculator">
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-buttons">
+          <button class="calc-btn" data-value="7">7</button>
+          <button class="calc-btn" data-value="8">8</button>
+          <button class="calc-btn" data-value="9">9</button>
+          <button class="calc-btn operator" data-value="/">/</button>
+          <button class="calc-btn" data-value="4">4</button>
+          <button class="calc-btn" data-value="5">5</button>
+          <button class="calc-btn" data-value="6">6</button>
+          <button class="calc-btn operator" data-value="*">×</button>
+          <button class="calc-btn" data-value="1">1</button>
+          <button class="calc-btn" data-value="2">2</button>
+          <button class="calc-btn" data-value="3">3</button>
+          <button class="calc-btn operator" data-value="-">-</button>
+          <button class="calc-btn" data-value="0">0</button>
+          <button class="calc-btn" data-value=".">.</button>
+          <button class="calc-btn" data-value="C">C</button>
+          <button class="calc-btn operator" data-value="+">+</button>
+          <button class="calc-btn equals" data-value="=">=</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Income Section -->
+  <section id="incomeSection" class="app-section">
+    <div class="income-container">
+      <h2><i class="fas fa-money-bill-wave"></i> Registro de Ingresos</h2>
+      <p>Lleva un control detallado de tus ingresos y ganancias.</p>
+      
+      <div class="income-form">
+        <input type="text" placeholder="Descripción del ingreso">
+        <input type="number" placeholder="Monto">
+        <select>
+          <option value="">Categoría</option>
+          <option value="ventas">Ventas</option>
+          <option value="servicios">Servicios</option>
+          <option value="inversiones">Inversiones</option>
+          <option value="otros">Otros</option>
+        </select>
+        <input type="date" placeholder="Fecha">
+        <button class="primary" style="grid-column: 1 / -1;">
+          <i class="fas fa-plus"></i> Agregar Ingreso
+        </button>
+      </div>
+      
+      <h3>Historial de Ingresos</h3>
+      <div class="income-list">
+        <div class="income-item">
+          <div class="income-details">
+            <div class="income-desc">Venta de productos</div>
+            <div class="income-date">15 Mayo 2023</div>
+          </div>
+          <div class="income-amount">$250.00</div>
+        </div>
+        
+        <div class="income-item">
+          <div class="income-details">
+            <div class="income-desc">Servicio de consultoría</div>
+            <div class="income-date">12 Mayo 2023</div>
+          </div>
+          <div class="income-amount">$500.00</div>
+        </div>
+        
+        <div class="income-item">
+          <div class="income-details">
+            <div class="income-desc">Venta online</div>
+            <div class="income-date">10 Mayo 2023</div>
+          </div>
+          <div class="income-amount">$120.00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Account Status Section -->
+  <section id="accountSection" class="app-section">
+    <div class="account-container">
+      <h2><i class="fas fa-wallet"></i> Estado de Cuenta</h2>
+      <p>Resumen general de tu situación financiera.</p>
+      
+      <div class="account-summary">
+        <div class="summary-card">
+          <i class="fas fa-money-bill-wave"></i>
+          <div class="summary-value">$1,250.00</div>
+          <div class="summary-label">Ingresos Totales</div>
+        </div>
+        
+        <div class="summary-card">
+          <i class="fas fa-credit-card"></i>
+          <div class="summary-value">$750.00</div>
+          <div class="summary-label">Gastos Totales</div>
+        </div>
+        
+        <div class="summary-card">
+          <i class="fas fa-piggy-bank"></i>
+          <div class="summary-value">$500.00</div>
+          <div class="summary-label">Balance Actual</div>
+        </div>
+        
+        <div class="summary-card">
+          <i class="fas fa-chart-line"></i>
+          <div class="summary-value">+25%</div>
+          <div class="summary-label">Crecimiento</div>
+        </div>
+      </div>
+      
+      <h3>Resumen Mensual</h3>
+      <p>Aquí se mostrará un gráfico de tus ingresos y gastos mensuales.</p>
+      <div style="background: var(--glass); height: 200px; border-radius: var(--radius-sm); display: flex; justify-content: center; align-items: center; margin-top: 16px;">
+        <i class="fas fa-chart-bar" style="font-size: 48px; color: var(--muted);"></i>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>
+      Consejo: guarda regularmente y exporta tus datos para respaldos. <i class="fas fa-info-circle"></i>
+    </span>
+  </footer>
+</div>
+
+<script>
+// ---------------------- VARIABLES ----------------------
+const storageKey = 'cuaderno_kaser_mobile_v1';
+const themeKey = 'cuaderno_theme';
+const darkModeKey = 'cuaderno_darkmode';
+const welcomeKey = 'cuaderno_welcome';
+let notes = [], activeId = null, filteredNotes = [];
+let tags = [];
+let autoSaveTimeout = null;
+
+// ---------------------- INITIALIZATION ----------------------
+function initApp() {
+  loadFromStorage();
+  loadTheme();
+  showWelcomePanel();
+  setupEventListeners();
+  setupNavigation();
+  setupCalculator();
+  
+  if (notes.length) {
+    renderList();
+    openNote(notes[0].id);
+  }
+}
+
+// ---------------------- STORAGE ----------------------
+function saveToStorage() {
+  localStorage.setItem(storageKey, JSON.stringify(notes));
+  updateStats();
+}
+
+function loadFromStorage() {
+  const raw = localStorage.getItem(storageKey);
+  if (raw) {
+    try {
+      notes = JSON.parse(raw);
+    } catch (e) {
+      notes = [];
+    }
+  } else {
+    notes = [{
+      id: genId(),
+      title: 'Bienvenido a Cuaderno de Negocios',
+      body: 'Escribe tus notas de negocio aquí.\n\n# Ejemplo de formato\n**Producto**: Café Premium\n**Cantidad**: 10 unidades\n**Precio**: $2.50\n**Total**: $25.00\n\n*Usa # para títulos*\n*Usa **texto** para negritas*\n*Usa *texto* para cursivas*',
+      tags: ['bienvenida', 'ejemplo'],
+      category: 'finanzas',
+      date: new Date().toISOString(),
+      favorite: false
+    }];
+  }
+  filteredNotes = [...notes];
+}
+
+// ---------------------- WELCOME PANEL ----------------------
+function hideWelcomePanel() {
+  const welcomePanel = document.getElementById('welcomePanel');
+  if (welcomePanel) {
+    welcomePanel.style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+    localStorage.setItem(welcomeKey, 'hidden');
+  }
+}
+
+function showWelcomePanel() {
+  if (localStorage.getItem(welcomeKey) === 'hidden') {
+    document.getElementById('welcomePanel').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+  } else {
+    document.getElementById('welcomePanel').style.display = 'flex';
+    document.getElementById('appContent').style.display = 'none';
+  }
+}
+
+// ---------------------- THEME ----------------------
+function loadTheme() {
+  const darkMode = localStorage.getItem(darkModeKey) || 'dark';
+  document.getElementById('darkModeToggle').checked = darkMode === 'light';
+  setDarkMode(darkMode === 'light');
+}
+
+function setDarkMode(isLight) {
+  if (isLight) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  localStorage.setItem(darkModeKey, isLight ? 'light' : 'dark');
+}
+
+// ---------------------- HELPERS ----------------------
+function genId() {
+  return Math.random().toString(36).slice(2, 9);
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    return 'Hoy ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } else if (diffDays === 1) {
+    return 'Ayer ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } else if (diffDays < 7) {
+    return `Hace ${diffDays} días`;
+  } else {
+    return date.toLocaleDateString();
+  }
+}
+
+function updateStats() {
+  document.getElementById('totalNotes').textContent = `${notes.length} notas`;
+  
+  // Calcular favoritos
+  const favorites = notes.filter(note => note.favorite).length;
+  document.getElementById('totalFavorites').textContent = `${favorites} fav`;
+}
+
+// ---------------------- NOTES ----------------------
+function renderList() {
+  const list = document.getElementById('noteList');
+  
+  // Mostrar skeleton loading si no hay notas
+  if (notes.length === 0) {
+    list.innerHTML = `
+      <div class="note-item" style="background: #1a2536;">
+        <div style="height: 16px; background: #22304a; margin-bottom: 8px; border-radius: 4px;"></div>
+        <div style="height: 12px; background: #22304a; width: 60%; border-radius: 4px;"></div>
+      </div>
+      <div class="note-item" style="background: #1a2536;">
+        <div style="height: 16px; background: #22304a; margin-bottom: 8px; border-radius: 4px;"></div>
+        <div style="height: 12px; background: #22304a; width: 60%; border-radius: 4px;"></div>
+      </div>
+    `;
+    return;
+  }
+  
+  list.innerHTML = '';
+  
+  if (filteredNotes.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">No se encontraron notas</div>';
+    return;
+  }
+  
+  filteredNotes.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'note-item' + (n.id === activeId ? ' active' : '');
+    
+    const categoryClass = n.category ? `category-${n.category}` : '';
+    const categoryInfo = n.category ? `<span class="tag ${categoryClass}">${n.category}</span>` : '';
+    
+    const tagInfo = n.tags && n.tags.length ? `
+      <div class="note-item-tags">
+        ${n.tags.slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('')}
+        ${n.tags.length > 3 ? `<span class="tag">+${n.tags.length - 3}</span>` : ''}
+      </div>
+    ` : '';
+    
+    el.innerHTML = `
+      <div class="note-item-header">
+        <div class="note-item-title">${n.title || '(sin título)'}</div>
+        <div class="note-item-date">${formatDate(n.date)}</div>
+      </div>
+      ${categoryInfo}
+      ${tagInfo}
+      <button class="favorite-btn ${n.favorite ? 'active' : ''}" data-id="${n.id}" style="position: absolute; top: 12px; right: 12px; background: none; border: none; color: ${n.favorite ? 'gold' : 'var(--muted)'};">
+        <i class="${n.favorite ? 'fas' : 'far'} fa-star"></i>
+      </button>
+    `;
+    
+    el.onclick = () => openNote(n.id);
+    list.appendChild(el);
+  });
+  
+  // Añadir event listeners a los botones de favoritos
+  document.querySelectorAll('.favorite-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFavorite(btn.dataset.id);
+    });
+  });
+  
+  document.getElementById('notesCount').textContent = `${filteredNotes.length}/${notes.length}`;
+  updateStats();
+}
+
+function openNote(id) {
+  const n = notes.find(x => x.id === id);
+  if (!n) return;
+  
+  activeId = id;
+  document.getElementById('noteTitle').value = n.title || '';
+  document.getElementById('noteBody').value = n.body || '';
+  document.getElementById('noteCategory').value = n.category || '';
+  
+  // Actualizar botón de favorito
+  const favoriteBtn = document.getElementById('favoriteBtn');
+  favoriteBtn.innerHTML = n.favorite ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+  
+  renderList();
+}
+
+function createNote() {
+  const now = new Date();
+  const n = {
+    id: genId(),
+    title: 'Nota ' + (notes.length + 1),
+    body: '',
+    tags: [],
+    category: '',
+    date: now.toISOString(),
+    favorite: false
+  };
+  
+  notes.unshift(n);
+  activeId = n.id;
+  filteredNotes = [...notes];
+  saveToStorage();
+  renderList();
+  openNote(n.id);
+}
+
+function saveNote() {
+  if (!activeId) return;
+  
+  const n = notes.find(x => x.id === activeId);
+  if (!n) return;
+  
+  n.title = document.getElementById('noteTitle').value;
+  n.body = document.getElementById('noteBody').value;
+  n.tags = tags;
+  n.category = document.getElementById('noteCategory').value;
+  n.date = new Date().toISOString();
+  
+  saveToStorage();
+  renderList();
+}
+
+function deleteActive() {
+  if (!activeId) return;
+  
+  notes = notes.filter(x => x.id !== activeId);
+  filteredNotes = filteredNotes.filter(x => x.id !== activeId);
+  activeId = notes[0] ? notes[0].id : null;
+  
+  saveToStorage();
+  renderList();
+  
+  if (activeId) {
+    openNote(activeId);
+  } else {
+    document.getElementById('noteTitle').value = '';
+    document.getElementById('noteBody').value = '';
+    document.getElementById('noteCategory').value = '';
+  }
+}
+
+function toggleFavorite(id) {
+  const note = notes.find(n => n.id === id);
+  if (note) {
+    note.favorite = !note.favorite;
+    note.date = new Date().toISOString(); // Actualizar fecha de modificación
+    
+    saveToStorage();
+    renderList();
+    
+    if (id === activeId) {
+      const favoriteBtn = document.getElementById('favoriteBtn');
+      favoriteBtn.innerHTML = note.favorite ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+    }
+  }
+}
+
+// ---------------------- CALCULATOR ----------------------
+function setupCalculator() {
+  let currentInput = '0';
+  let previousInput = '';
+  let operation = null;
+  let shouldResetScreen = false;
+  
+  const display = document.getElementById('calcDisplay');
+  
+  function updateDisplay() {
+    display.textContent = currentInput;
+  }
+  
+  function appendNumber(number) {
+    if (currentInput === '0' || shouldResetScreen) {
+      currentInput = number;
+      shouldResetScreen = false;
+    } else {
+      currentInput += number;
+    }
+  }
+  
+  function chooseOperation(op) {
+    if (currentInput === '0') return;
+    
+    if (previousInput !== '') {
+      compute();
+    }
+    
+    operation = op;
+    previousInput = currentInput;
+    shouldResetScreen = true;
+  }
+  
+  function compute() {
+    let computation;
+    const prev = parseFloat(previousInput);
+    const current = parseFloat(currentInput);
+    
+    if (isNaN(prev) || isNaN(current)) return;
+    
+    switch (operation) {
+      case '+':
+        computation = prev + current;
+        break;
+      case '-':
+        computation = prev - current;
+        break;
+      case '*':
+        computation = prev * current;
+        break;
+      case '/':
+        computation = prev / current;
+        break;
+      default:
+        return;
+    }
+    
+    currentInput = computation.toString();
+    operation = null;
+    previousInput = '';
+    shouldResetScreen = true;
+  }
+  
+  function clear() {
+    currentInput = '0';
+    previousInput = '';
+    operation = null;
+  }
+  
+  function handleButtonClick(value) {
+    if (value === 'C') {
+      clear();
+    } else if (value === '=') {
+      compute();
+    } else if (['+', '-', '*', '/'].includes(value)) {
+      chooseOperation(value);
+    } else if (value === '.') {
+      if (shouldResetScreen) {
+        currentInput = '0.';
+        shouldResetScreen = false;
+      } else if (!currentInput.includes('.')) {
+        currentInput += '.';
+      }
+    } else {
+      if (shouldResetScreen) {
+        currentInput = value;
+        shouldResetScreen = false;
+      } else {
+        appendNumber(value);
+      }
+    }
+    
+    updateDisplay();
+  }
+  
+  // Add event listeners to calculator buttons
+  document.querySelectorAll('.calc-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      handleButtonClick(button.dataset.value);
+    });
+  });
+  
+  // Initialize display
+  updateDisplay();
+}
+
+// ---------------------- NAVIGATION ----------------------
+function setupNavigation() {
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('.app-section');
+  
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const targetSection = item.getAttribute('data-section');
+      
+      // Update active nav item
+      navItems.forEach(navItem => {
+        navItem.classList.remove('active');
+      });
+      item.classList.add('active');
+      
+      // Show target section
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(`${targetSection}Section`).classList.add('active');
+    });
+  });
+}
+
+// ---------------------- EVENT LISTENERS ----------------------
+function setupEventListeners() {
+  // Welcome button
+  document.getElementById('startButton').addEventListener('click', hideWelcomePanel);
+  
+  // Notes buttons
+  document.getElementById('newNoteBtn').addEventListener('click', createNote);
+  document.getElementById('saveBtn').addEventListener('click', saveNote);
+  document.getElementById('resetBtn').addEventListener('click', deleteActive);
+  document.getElementById('favoriteBtn').addEventListener('click', () => {
+    if (activeId) toggleFavorite(activeId);
+  });
+  
+  // Theme toggle
+  document.getElementById('darkModeToggle').addEventListener('change', function() {
+    setDarkMode(this.checked);
+  });
+  
+  // Search functionality
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    filteredNotes = notes.filter(n => {
+      return !query || 
+        (n.title && n.title.toLowerCase().includes(query)) ||
+        (n.body && n.body.toLowerCase().includes(query)) ||
+        (n.tags && n.tags.some(t => t.toLowerCase().includes(query))) ||
+        (n.category && n.category.toLowerCase().includes(query));
+    });
+    
+    renderList();
+  });
+}
+
+// ---------------------- INIT APP ----------------------
+document.addEventListener('DOMContentLoaded', function() {
+  // Simulate loading delay
+  setTimeout(initApp, 500);
+});
+</script>
+</body>
+</html>
